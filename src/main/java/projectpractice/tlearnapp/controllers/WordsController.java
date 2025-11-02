@@ -20,6 +20,6 @@ public class WordsController {
     @ApiResponse(description = "word wasn't found", responseCode = "404")
     @ApiResponse(description = "an error occurred", responseCode = "500")
     public GetWordResponse getWord() {
-        return wordsService.getWord();
+        return wordsService.getRandomWord();
     }
 }

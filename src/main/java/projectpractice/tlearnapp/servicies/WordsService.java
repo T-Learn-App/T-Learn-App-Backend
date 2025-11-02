@@ -18,7 +18,7 @@ public class WordsService {
     private final WordsRepository wordsRepository;
     private final WordMapper wordMapper;
 
-    public GetWordResponse getWord() {
+    public GetWordResponse getRandomWord() {
         Word word = wordsRepository.findRandomWord().orElseThrow(DataNotFoundException::new);
         log.info("word: {} was taken successfully", word.getWord());
         return wordMapper.toGetWordResponse(word);

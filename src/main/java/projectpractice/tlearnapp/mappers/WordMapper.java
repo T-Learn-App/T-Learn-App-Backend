@@ -7,5 +7,5 @@ import projectpractice.tlearnapp.entities.Word;
 @Mapper(componentModel = "spring")
 public interface WordMapper {
 
-    GetWordResponse toGetWordResponse(Word word);
+    GetWordResponse toGetWordResponse(Word entity);
 }
