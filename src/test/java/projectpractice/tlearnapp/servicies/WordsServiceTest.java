@@ -8,12 +8,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import projectpractice.tlearnapp.dto.responses.GetWordResponse;
 import projectpractice.tlearnapp.entities.Word;
+import projectpractice.tlearnapp.exceptions.DataNotFoundException;
 import projectpractice.tlearnapp.mappers.WordMapper;
 import projectpractice.tlearnapp.repositories.WordsRepository;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -52,5 +55,14 @@ public class WordsServiceTest {
         assertThat(response.translation()).isEqualTo("testTranslation");
         assertThat(response.partOfSpeech()).isEqualTo("testPartOfSpeech");
         verify(wordsRepository, times(1)).findRandomWord();
+    }
+
+    @Test
+    public void shouldGetWordUnsuccessfully() {
+        Optional<Word> word = Optional.empty();
+        when(wordsRepository.findRandomWord()).thenReturn(word);
+
+        assertThatExceptionOfType(DataNotFoundException.class)
+                .isThrownBy(() -> wordsService.getRandomWord());
     }
 }
