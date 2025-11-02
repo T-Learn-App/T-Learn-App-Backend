@@ -2,12 +2,12 @@ package projectpractice.tlearnapp.controllers;
 
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import projectpractice.tlearnapp.dto.responses.ApiErrorResponse;
 import projectpractice.tlearnapp.exceptions.GetWordException;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class AdviceController {
 
     @ExceptionHandler(GetWordException.class)
