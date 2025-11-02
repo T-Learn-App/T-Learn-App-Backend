@@ -2,28 +2,25 @@ package projectpractice.tlearnapp.servicies;
 
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import projectpractice.tlearnapp.dto.responses.GetWordResponse;
-import projectpractice.tlearnapp.exceptions.GetWordException;
+import projectpractice.tlearnapp.entities.Word;
+import projectpractice.tlearnapp.exceptions.DataNotFoundException;
+import projectpractice.tlearnapp.mappers.WordMapper;
 import projectpractice.tlearnapp.repositories.WordsRepository;
-import projectpractice.tlearnapp.repositories.entities.Word;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class WordsService {
 
-    private WordsRepository wordsRepository;
+    private final WordsRepository wordsRepository;
+    private final WordMapper wordMapper;
 
     public GetWordResponse getWord() {
-        try {
-            Word word = wordsRepository.findRandomWord();
-            return new GetWordResponse(
-                    word.getWord(),
-                    word.getTranscription(),
-                    word.getTranslation(),
-                    word.getPartOfSpeech());
-        } catch (Exception ex) {
-            throw new GetWordException(ex.getMessage());
-        }
+        Word word = wordsRepository.findRandomWord().orElseThrow(DataNotFoundException::new);
+        log.info("word: {} was taken successfully", word.getWord());
+        return wordMapper.toGetWordResponse(word);
     }
 }
