@@ -22,6 +22,7 @@
         <mapstruct.version>1.5.5.Final</mapstruct.version>
         <lombok.version>1.18.32</lombok.version>
         <testcontainers.version>1.19.7</testcontainers.version>
+        <liquibase.version>4.27.0</liquibase.version>
     </properties>
 
     <dependencies>
@@ -109,6 +110,13 @@
                 <artifactId>jaxb-api</artifactId>
                 <version>2.4.0-b180830.0359</version>
             </dependency>
+
+            <!-- liquibase -->
+            <dependency>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-core</artifactId>
+                <version>${liquibase.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -153,6 +161,15 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <configuration>
+                    <propertyFile>src/main/resources/db.changelog/local/liquibase.properties</propertyFile>
+                    <changeLogFile>src/main/resources/db.changelog/db.changelog-master.xml</changeLogFile>
                 </configuration>
             </plugin>
         </plugins>

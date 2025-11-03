@@ -21,6 +21,7 @@ import java.io.Serializable;
 public class Word implements Serializable {
 
     @Id
+    @SequenceGenerator(name = "word_seq")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
