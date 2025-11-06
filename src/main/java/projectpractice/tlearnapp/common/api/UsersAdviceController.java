@@ -16,12 +16,12 @@ public class UsersAdviceController {
     @ExceptionHandler(UserAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ApiErrorResponse handleDataAlreadyExistException(UserAlreadyExistsException e) {
-        log.error("UserAlreadyExistsException: {}: {}", e.getMessage(), e.getUserEmail(), e);
+        log.error("UserAlreadyExistsException: {}", e.getMessage(), e);
 
         return new ApiErrorResponse(
                 409,
                 e.getClass().getSimpleName(),
-                "The user with email: " + e.getUserEmail() + " already exist"
+                "The user already exists"
         );
     }
 }

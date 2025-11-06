@@ -5,12 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import projectpractice.tlearnapp.controllers.UsersController;
+import projectpractice.tlearnapp.controllers.WordsController;
 import projectpractice.tlearnapp.dto.responses.ApiErrorResponse;
 import projectpractice.tlearnapp.exceptions.BusinessException;
 import projectpractice.tlearnapp.exceptions.DataNotFoundException;
 import projectpractice.tlearnapp.exceptions.InvalidRequestException;
 
-@RestControllerAdvice
+@RestControllerAdvice(assignableTypes = {WordsController.class, UsersController.class})
 @Slf4j
 public class AdviceController {
 
