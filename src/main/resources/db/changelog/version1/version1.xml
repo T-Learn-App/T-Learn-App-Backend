@@ -6,6 +6,7 @@
 
     <changeSet id="2025-11-03" author="pavel_senko">
         <sqlFile path="migrations/migration1.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="migrations/migration2.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
 </databaseChangeLog>

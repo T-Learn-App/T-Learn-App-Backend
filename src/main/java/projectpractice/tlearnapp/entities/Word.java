@@ -18,12 +18,7 @@ import java.io.Serializable;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Word implements Serializable {
-
-    @Id
-    @SequenceGenerator(name = "word_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+public class Word extends BaseEntity implements Serializable {
 
     @Column(nullable = false)
     private String word;

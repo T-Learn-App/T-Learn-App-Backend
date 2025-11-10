@@ -20,12 +20,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User implements Serializable {
-
-    @Id
-    @SequenceGenerator(name = "user_seq")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+public class User extends AuditableBaseEntity implements Serializable {
 
     @Column(nullable = false)
     private String email;

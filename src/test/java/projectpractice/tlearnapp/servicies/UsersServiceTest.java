@@ -10,7 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import projectpractice.tlearnapp.dto.UserDto;
 import projectpractice.tlearnapp.entities.User;
 import projectpractice.tlearnapp.exceptions.DataNotFoundException;
-import projectpractice.tlearnapp.exceptions.UserAlreadyExistsException;
+import projectpractice.tlearnapp.exceptions.ConflictException;
 import projectpractice.tlearnapp.mappers.UserMapper;
 import projectpractice.tlearnapp.repositories.UsersRepository;
 
@@ -77,7 +77,7 @@ public class UsersServiceTest {
     public void shouldAddUserUnsuccessfullyWhenUserAlreadyExists() {
         when(usersRepository.existsByEmail(user.get().getEmail())).thenReturn(true);
 
-        assertThatExceptionOfType(UserAlreadyExistsException.class)
+        assertThatExceptionOfType(ConflictException.class)
                 .isThrownBy(() -> usersService.addUser(user.get().getEmail()));
     }
 }

@@ -7,6 +7,6 @@ import projectpractice.tlearnapp.entities.User;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
-    UserDto toUserResponse(User user);
+    UserDto toUserDto(User user);
 
 }

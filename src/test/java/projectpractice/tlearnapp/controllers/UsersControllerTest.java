@@ -4,15 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import projectpractice.tlearnapp.common.api.UsersAdviceController;
 import projectpractice.tlearnapp.dto.UserDto;
 import projectpractice.tlearnapp.exceptions.DataNotFoundException;
 import projectpractice.tlearnapp.exceptions.InvalidRequestException;
-import projectpractice.tlearnapp.exceptions.UserAlreadyExistsException;
+import projectpractice.tlearnapp.exceptions.ConflictException;
 import projectpractice.tlearnapp.servicies.UsersService;
 
 import static org.mockito.Mockito.when;
@@ -101,7 +99,7 @@ public class UsersControllerTest {
 
     @Test
     public void addUserReturnConflict() throws Exception {
-        when(usersService.addUser(response.email())).thenThrow(UserAlreadyExistsException.class);
+        when(usersService.addUser(response.email())).thenThrow(ConflictException.class);
 
         mockMvc.perform(post("/users/registration")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -111,7 +109,7 @@ public class UsersControllerTest {
             }
         """))
                 .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.exception").value("UserAlreadyExistsException"))
+                .andExpect(jsonPath("$.exception").value("ConflictException"))
                 .andExpect(jsonPath("$.errorMessage").value(
                         "The user already exists"));
     }
