@@ -8,9 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import projectpractice.tlearnapp.dto.UserDto;
+import projectpractice.tlearnapp.exceptions.ConflictException;
 import projectpractice.tlearnapp.exceptions.DataNotFoundException;
 import projectpractice.tlearnapp.exceptions.InvalidRequestException;
-import projectpractice.tlearnapp.exceptions.ConflictException;
 import projectpractice.tlearnapp.servicies.UsersService;
 
 import static org.mockito.Mockito.when;
@@ -111,6 +111,6 @@ public class UsersControllerTest {
                 .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.exception").value("ConflictException"))
                 .andExpect(jsonPath("$.errorMessage").value(
-                        "The user already exists"));
+                        "Data already exists"));
     }
 }

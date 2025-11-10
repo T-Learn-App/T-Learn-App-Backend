@@ -4,11 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import projectpractice.tlearnapp.common.api.AdviceController;
 import projectpractice.tlearnapp.dto.responses.GetWordResponse;
 import projectpractice.tlearnapp.exceptions.DataNotFoundException;
 import projectpractice.tlearnapp.exceptions.InvalidRequestException;
@@ -61,7 +58,7 @@ public class WordsControllerTest {
 
         mockMvc.perform(get("/words"))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("status").value(404))
+                .andExpect(jsonPath("statusCode").value(404))
                 .andExpect(jsonPath("exception").value("DataNotFoundException"))
                 .andExpect(jsonPath("errorMessage").value("Data not found"));
     }
@@ -73,7 +70,7 @@ public class WordsControllerTest {
 
         mockMvc.perform(get("/words"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("status").value(400))
+                .andExpect(jsonPath("statusCode").value(400))
                 .andExpect(jsonPath("exception").value("InvalidRequestException"))
                 .andExpect(jsonPath("errorMessage").value("Invalid request"));
     }

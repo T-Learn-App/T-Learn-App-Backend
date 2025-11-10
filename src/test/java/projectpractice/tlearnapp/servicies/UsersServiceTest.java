@@ -37,7 +37,7 @@ public class UsersServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = Optional.of(new User(1L, "pasha@mail.ru"));
+        user = Optional.of(new User("pasha@mail.ru"));
         userDto = new UserDto(1L, "pasha@mail.ru");
     }
 
@@ -60,7 +60,7 @@ public class UsersServiceTest {
     @Test
     public void shouldAddUserSuccessfully() {
         String email = "pasha@mail.ru";
-        User savedUser = User.builder().id(1L).email(email).build();
+        User savedUser = User.builder().email(email).build();
         UserDto expectedDto = new UserDto(1L, email);
 
         when(usersRepository.existsByEmail(email)).thenReturn(false);

@@ -1,14 +1,14 @@
 package projectpractice.tlearnapp.entities;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
 
 
-@Entity
 @MappedSuperclass
+@Getter
 public abstract class BaseEntity {
 
     @Id

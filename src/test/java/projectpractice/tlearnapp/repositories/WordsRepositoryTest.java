@@ -31,7 +31,6 @@ public class WordsRepositoryTest {
     @Transactional
     public void getWordSuccessfully() {
         Word word = new Word(
-                null,
                 "testWord",
                 "testTranscription",
                 "testTranslation",

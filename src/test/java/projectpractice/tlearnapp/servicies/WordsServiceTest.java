@@ -34,7 +34,6 @@ public class WordsServiceTest {
     @Test
     public void shouldGetWordSuccessfully() {
         Optional<Word> word = Optional.of(new Word(
-                1L,
                 "testWord",
                 "testTranscription",
                 "testTranslation",
