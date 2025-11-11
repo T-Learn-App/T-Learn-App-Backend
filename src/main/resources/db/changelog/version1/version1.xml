@@ -5,8 +5,8 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
     <changeSet id="2025-11-03" author="pavel_senko">
-        <sqlFile path="migrations/migration1.sql" relativeToChangelogFile="true"/>
-        <sqlFile path="migrations/migration2.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="migrations/create_table_words.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="migrations/create_table_users.sql" relativeToChangelogFile="true"/>
     </changeSet>
 
 </databaseChangeLog>

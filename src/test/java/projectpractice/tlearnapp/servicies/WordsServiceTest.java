@@ -44,7 +44,7 @@ public class WordsServiceTest {
                 "testTranslation",
                 "testPartOfSpeech");
         when(wordsRepository.findRandomWord()).thenReturn(word);
-        when(wordMapper.toGetWordResponse(word.get())).thenReturn(getWordResponse);
+        when(wordMapper.toWordResponse(word.get())).thenReturn(getWordResponse);
 
         GetWordResponse response = wordsService.getRandomWord();
 

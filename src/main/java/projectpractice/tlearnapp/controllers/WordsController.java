@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import projectpractice.tlearnapp.dto.responses.GetWordResponse;
+import projectpractice.tlearnapp.dto.WordResponse;
 import projectpractice.tlearnapp.servicies.WordsService;
 
 @RestController
@@ -26,7 +26,7 @@ public class WordsController {
             @ApiResponse(description = "an error occurred", responseCode = "500")      
     })
     @Operation(summary = "Get random word", description = "Retrieves a word from the data base")
-    public GetWordResponse getWord() {
+    public WordResponse getWord() {
         return wordsService.getRandomWord();
     }
 }
