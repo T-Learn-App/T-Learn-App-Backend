@@ -6,7 +6,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import projectpractice.tlearnapp.dto.responses.GetWordResponse;
+import projectpractice.tlearnapp.dto.WordResponse;
+import projectpractice.tlearnapp.entities.Category;
 import projectpractice.tlearnapp.entities.Word;
 import projectpractice.tlearnapp.exceptions.DataNotFoundException;
 import projectpractice.tlearnapp.mappers.WordMapper;
@@ -37,16 +38,18 @@ public class WordsServiceTest {
                 "testWord",
                 "testTranscription",
                 "testTranslation",
-                "testPartOfSpeech"));
-        GetWordResponse getWordResponse = new GetWordResponse(
+                "testPartOfSpeech",
+                new Category()));
+        WordResponse getWordResponse = new WordResponse(
                 "testWord",
                 "testTranscription",
                 "testTranslation",
-                "testPartOfSpeech");
+                "testPartOfSpeech",
+                "testCategory");
         when(wordsRepository.findRandomWord()).thenReturn(word);
         when(wordMapper.toWordResponse(word.get())).thenReturn(getWordResponse);
 
-        GetWordResponse response = wordsService.getRandomWord();
+        WordResponse response = wordsService.getRandomWord();
 
         assertThat(response.word()).isEqualTo("testWord");
         assertThat(response.transcription()).isEqualTo("testTranscription");

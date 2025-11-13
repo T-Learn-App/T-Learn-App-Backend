@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import projectpractice.tlearnapp.dto.responses.GetWordResponse;
+import projectpractice.tlearnapp.dto.WordResponse;
 import projectpractice.tlearnapp.exceptions.DataNotFoundException;
 import projectpractice.tlearnapp.exceptions.InvalidRequestException;
 import projectpractice.tlearnapp.servicies.WordsService;
@@ -27,15 +27,16 @@ public class WordsControllerTest {
     @MockitoBean
     private WordsService wordService;
 
-    private GetWordResponse response;
+    private WordResponse response;
 
     @BeforeEach
     void setUp() {
-        response = new GetWordResponse(
+        response = new WordResponse(
                 "testWord",
                 "testTranscription",
                 "testTranslation",
-                "testPartOfSpeech");
+                "testPartOfSpeech",
+                "testCategory");
     }
 
     @Test

@@ -17,15 +17,15 @@ import java.io.Serializable;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Stats extends AuditableBaseEntity implements Serializable {
+public class Stat extends AuditableBaseEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User user_id;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "word_id")
-    private Word word_id;
+    private Word word;
 
     @Column(nullable = false)
     private Long attempts;

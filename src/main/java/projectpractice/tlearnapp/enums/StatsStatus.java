@@ -8,7 +8,7 @@ public enum StatsStatus {
     IN_PROGRESS,
     COMPLETED;
 
-    public static StatsStatus getStatus(int attempts) {
+    public static StatsStatus getStatus(Long attempts) {
         if (attempts == 0) {
             return DRAFT;
         } else if (attempts >= 1 && attempts <= 2) {

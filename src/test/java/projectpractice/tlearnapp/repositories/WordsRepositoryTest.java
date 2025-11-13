@@ -13,6 +13,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import projectpractice.tlearnapp.TestConfig;
+import projectpractice.tlearnapp.entities.Category;
 import projectpractice.tlearnapp.entities.Word;
 
 import java.util.Optional;
@@ -34,7 +35,8 @@ public class WordsRepositoryTest {
                 "testWord",
                 "testTranscription",
                 "testTranslation",
-                "testPartOfSpeech");
+                "testPartOfSpeech",
+                new Category());
         wordsRepository.save(word);
 
         Optional<Word> wordOptional = wordsRepository.findRandomWord();
