@@ -5,15 +5,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import projectpractice.tlearnapp.enums.StatQueueState;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import projectpractice.tlearnapp.enums.StatQueueStatus;
 
 import java.io.Serializable;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "stat_queue")
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class StatQueue extends BaseEntity implements Serializable {
 
     @ManyToOne
@@ -25,11 +32,10 @@ public class StatQueue extends BaseEntity implements Serializable {
     private Word word;
 
     @Column(nullable = false)
-    private StatQueueState state;
-
-    @Column(nullable = false)
     private StatQueueStatus status;
 
     @Column
     private String error;
 }
+
+

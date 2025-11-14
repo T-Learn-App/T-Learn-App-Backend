@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import projectpractice.tlearnapp.entities.Stat;
 import projectpractice.tlearnapp.entities.StatQueue;
-import projectpractice.tlearnapp.enums.StatQueueState;
 import projectpractice.tlearnapp.enums.StatQueueStatus;
 import projectpractice.tlearnapp.enums.StatsStatus;
 import projectpractice.tlearnapp.repositories.StatQueueRepository;
@@ -27,7 +26,7 @@ public class StatQueueJob implements JobTrigger {
     @Transactional
     public void run(Integer butchSize, Integer iterationSize, Duration before) {
         List<StatQueue> lockedReports =
-                statQueueRepository.findByStatusLocked(butchSize, StatQueueStatus.ACCEPTED, StatQueueState.SUCCESS);
+                statQueueRepository.findByStatusLocked(butchSize, StatQueueStatus.ACCEPTED);
         for (StatQueue stat : lockedReports) {
             Long userId = stat.getUser().getId();
             Long wordId = stat.getWord().getId();

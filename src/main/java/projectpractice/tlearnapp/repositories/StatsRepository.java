@@ -7,9 +7,13 @@ import org.springframework.data.repository.query.Param;
 import projectpractice.tlearnapp.entities.Stat;
 import projectpractice.tlearnapp.enums.StatsStatus;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface StatsRepository extends JpaRepository<Stat, Long> {
+
+    @Query(value = "SELECT * FROM stats WHERE user_id = :userId", nativeQuery = true)
+    List<Stat> findAllByUserId(@Param("userId") Long userId);
 
     @Query(value = "SELECT * FROM stats WHERE user_id = :userId AND word_id = :wordId", nativeQuery = true)
     Optional<Stat> findByUserIdAndWordId(@Param("userId") Long userId, @Param("wordId") Long wordId);
