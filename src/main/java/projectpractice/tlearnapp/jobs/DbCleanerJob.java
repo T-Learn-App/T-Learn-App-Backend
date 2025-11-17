@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import projectpractice.tlearnapp.enums.StatQueueState;
 import projectpractice.tlearnapp.enums.StatQueueStatus;
 import projectpractice.tlearnapp.repositories.StatQueueRepository;
 
@@ -21,7 +20,7 @@ public class DbCleanerJob {
     public void clean() {
         try {
             log.info("Starting database cleanup...");
-            statQueueRepository.deleteByStatusOrState(StatQueueStatus.COMPLETED, StatQueueState.FAILED);
+            statQueueRepository.deleteByStatusOrState(StatQueueStatus.COMPLETED);
             log.info("Database cleanup completed");
         } catch (Exception e) {
             log.error("Error during database cleanup", e);
