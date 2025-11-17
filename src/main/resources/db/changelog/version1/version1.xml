@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="2025-11-03" author="pavel_senko">
+        <sqlFile path="migrations/migration1.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="migrations/migration2.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+
+</databaseChangeLog>
