@@ -21,7 +21,7 @@ import java.io.Serializable;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class StatQueue extends BaseEntity implements Serializable {
+public class StatQueue extends AuditableBaseEntity implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "user_id")

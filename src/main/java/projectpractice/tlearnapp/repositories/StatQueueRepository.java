@@ -11,12 +11,22 @@ import java.util.List;
 
 public interface StatQueueRepository extends JpaRepository<StatQueue, Long> {
 
-    @Query(value = "SELECT * FROM stat_queue " +
-            "WHERE status = #status FOR UPDATE SKIP LOCKED LIMIT #butchSize",
+    @Query(value = """ 
+            SELECT * FROM stat_queue
+            WHERE status = :status FOR UPDATE SKIP LOCKED LIMIT #butchSize
+            """,
             nativeQuery = true)
     List<StatQueue> findByStatusLocked(Integer butchSize, StatQueueStatus status);
 
     @Modifying
-    @Query(value = "DELETE FROM stat_queue WHERE status = :status", nativeQuery = true)
-    void deleteByStatusOrState(@Param("status") StatQueueStatus status);
+    @Query(value = """
+        WITH cte_limit AS (
+        SELECT CTID FROM stat_queue
+        WHERE status = :status AND created_at > NOW() - INTERVAL '1 day'
+        LIMIT :limit
+        )
+        DELETE FROM stat_queue
+        WHERE CTID IN (SELECT CTID FROM cte_limit);
+        """, nativeQuery = true)
+    void deleteByStatusOrState(@Param("status") StatQueueStatus status, @Param("limit") Long limit);
 }

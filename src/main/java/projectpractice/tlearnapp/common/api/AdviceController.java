@@ -12,7 +12,7 @@ import projectpractice.tlearnapp.exceptions.ConflictException;
 import projectpractice.tlearnapp.exceptions.DataNotFoundException;
 import projectpractice.tlearnapp.exceptions.InvalidRequestException;
 
-@RestControllerAdvice(assignableTypes = {WordsController.class, UsersController.class})
+@RestControllerAdvice
 public class AdviceController {
 
     @ExceptionHandler(BusinessException.class)

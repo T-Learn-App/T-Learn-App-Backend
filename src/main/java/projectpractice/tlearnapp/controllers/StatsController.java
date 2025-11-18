@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import projectpractice.tlearnapp.servicies.StatsService;
 @RestController
 @RequestMapping("stats")
 @AllArgsConstructor
+@Validated
 @Tag(name = "Stats Management", description = "Operations related to stats management")
 public class StatsController {
 
@@ -37,9 +39,8 @@ public class StatsController {
     }
 
     @PostMapping("/complete")
-    @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses({
-            @ApiResponse(description = "word marked as completed successfully", responseCode = "201"),
+            @ApiResponse(description = "word marked as completed successfully", responseCode = "200"),
             @ApiResponse(description = "word or user wasn't found", responseCode = "404"),
             @ApiResponse(description = "word can't be send this moment", responseCode = "422"),
             @ApiResponse(description = "an error occurred", responseCode = "500")

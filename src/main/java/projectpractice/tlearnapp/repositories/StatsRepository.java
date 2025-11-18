@@ -19,8 +19,10 @@ public interface StatsRepository extends JpaRepository<Stat, Long> {
     Optional<Stat> findByUserIdAndWordId(@Param("userId") Long userId, @Param("wordId") Long wordId);
 
     @Modifying
-    @Query(value = "UPDATE stats SET attempts = attempts + 1, status = :status, updated_at = NOW() " +
-            "WHERE user_id = :userId AND word_id = :wordId", nativeQuery = true)
+    @Query(value = """ 
+            UPDATE stats SET attempts = attempts + 1, status = :status, updated_at = NOW()
+            WHERE user_id = :userId AND word_id = :wordId
+            """, nativeQuery = true)
     void updateAttemptsAndStatusByUserIdAndWordId(@Param("userId") Long userId,
                                                   @Param("wordId") Long wordId,
                                                   @Param("status") StatsStatus status);

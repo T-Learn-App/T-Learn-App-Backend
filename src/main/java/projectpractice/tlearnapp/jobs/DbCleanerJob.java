@@ -8,19 +8,22 @@ import org.springframework.transaction.annotation.Transactional;
 import projectpractice.tlearnapp.enums.StatQueueStatus;
 import projectpractice.tlearnapp.repositories.StatQueueRepository;
 
+import java.time.Duration;
+
 @Slf4j
 @Component
 @AllArgsConstructor
-public class DbCleanerJob {
+public class DbCleanerJob implements JobTrigger {
 
     private final StatQueueRepository statQueueRepository;
 
-    @Scheduled(cron = "0 0 12 * * ?")
+    @Override
     @Transactional
-    public void clean() {
+    public void run(Integer butchSize, Integer iterationSize, Duration before) {
         try {
             log.info("Starting database cleanup...");
-            statQueueRepository.deleteByStatusOrState(StatQueueStatus.COMPLETED);
+            Long limit = 30L;
+            statQueueRepository.deleteByStatusOrState(StatQueueStatus.COMPLETED, limit);
             log.info("Database cleanup completed");
         } catch (Exception e) {
             log.error("Error during database cleanup", e);
