@@ -26,4 +26,15 @@ public interface StatsRepository extends JpaRepository<Stat, Long> {
     void updateAttemptsAndStatusByUserIdAndWordId(@Param("userId") Long userId,
                                                   @Param("wordId") Long wordId,
                                                   @Param("status") StatsStatus status);
+
+    @Modifying
+    @Query(value = """
+                   WITH rotation_words AS (
+                       DELETE FROM stats WHERE id IN (
+                           SELECT * FROM stats WHERE attempts >= 3 AND updated_at > NOW() - 7 LIMIT 2)
+                       RETURNING *
+                   )
+                   SELECT * FROM rotation_words
+                   """, nativeQuery = true)
+    List<Stat> findRotationStatsByUserId(Long userId);
 }
