@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import projectpractice.tlearnapp.dto.WordResponse;
+import projectpractice.tlearnapp.dto.responses.WordResponse;
 import projectpractice.tlearnapp.entities.Category;
 import projectpractice.tlearnapp.entities.Word;
 import projectpractice.tlearnapp.exceptions.DataNotFoundException;
@@ -46,24 +46,24 @@ public class WordsServiceTest {
                 "testTranslation",
                 "testPartOfSpeech",
                 "testCategory");
-        when(wordsRepository.findRandomWord()).thenReturn(word);
+        when(wordsRepository.findRandomWords()).thenReturn(word);
         when(wordMapper.toWordResponse(word.get())).thenReturn(getWordResponse);
 
-        WordResponse response = wordsService.getRandomWord();
+        WordResponse response = wordsService.getRandomWords();
 
         assertThat(response.word()).isEqualTo("testWord");
         assertThat(response.transcription()).isEqualTo("testTranscription");
         assertThat(response.translation()).isEqualTo("testTranslation");
         assertThat(response.partOfSpeech()).isEqualTo("testPartOfSpeech");
-        verify(wordsRepository, times(1)).findRandomWord();
+        verify(wordsRepository, times(1)).findRandomWords();
     }
 
     @Test
     public void shouldGetWordUnsuccessfully() {
         Optional<Word> word = Optional.empty();
-        when(wordsRepository.findRandomWord()).thenReturn(word);
+        when(wordsRepository.findRandomWords()).thenReturn(word);
 
         assertThatExceptionOfType(DataNotFoundException.class)
-                .isThrownBy(() -> wordsService.getRandomWord());
+                .isThrownBy(() -> wordsService.getRandomWords());
     }
 }

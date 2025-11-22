@@ -21,12 +21,12 @@ public interface StatQueueRepository extends JpaRepository<StatQueue, Long> {
     @Modifying
     @Query(value = """
         WITH cte_limit AS (
-        SELECT CTID FROM stat_queue
+        SELECT id FROM stat_queue
         WHERE status = :status AND created_at > NOW() - INTERVAL '1 day'
         LIMIT :limit
         )
         DELETE FROM stat_queue
-        WHERE CTID IN (SELECT CTID FROM cte_limit);
+        WHERE id IN (SELECT id FROM cte_limit);
         """, nativeQuery = true)
     void deleteByStatusOrState(@Param("status") StatQueueStatus status, @Param("limit") Long limit);
 }

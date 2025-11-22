@@ -2,7 +2,6 @@ package projectpractice.tlearnapp.jobs;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import projectpractice.tlearnapp.enums.StatQueueStatus;
@@ -20,13 +19,7 @@ public class DbCleanerJob implements JobTrigger {
     @Override
     @Transactional
     public void run(Integer butchSize, Integer iterationSize, Duration before) {
-        try {
-            log.info("Starting database cleanup...");
-            Long limit = 30L;
-            statQueueRepository.deleteByStatusOrState(StatQueueStatus.COMPLETED, limit);
-            log.info("Database cleanup completed");
-        } catch (Exception e) {
-            log.error("Error during database cleanup", e);
-        }
+        Long limit = 30L;
+        statQueueRepository.deleteByStatusOrState(StatQueueStatus.COMPLETED, limit);
     }
 }

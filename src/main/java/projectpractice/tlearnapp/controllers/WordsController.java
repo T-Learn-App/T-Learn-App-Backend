@@ -6,33 +6,33 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import projectpractice.tlearnapp.dto.StatQueueDto;
-import projectpractice.tlearnapp.dto.WordResponse;
+import projectpractice.tlearnapp.dto.responses.ListWordResponse;
+import projectpractice.tlearnapp.dto.responses.WordResponse;
 import projectpractice.tlearnapp.servicies.WordsService;
 
 @RestController
 @RequestMapping("words")
+@Validated
 @AllArgsConstructor
 @Tag(name = "Words Management", description = "Operations related to words management")
 public class WordsController {
 
     private final WordsService wordsService;
 
-    @GetMapping
+    @GetMapping("/{userId}")
     @ApiResponses({
-            @ApiResponse(description = "gives an english word", responseCode = "200"),
-            @ApiResponse(description = "word wasn't found", responseCode = "404"),
-            @ApiResponse(description = "an error occurred", responseCode = "500")      
+            @ApiResponse(description = "gives english words", responseCode = "200"),
+            @ApiResponse(description = "words weren't found", responseCode = "404"),
+            @ApiResponse(description = "an error occurred", responseCode = "500")
     })
-    @Operation(summary = "Get random word", description = "Retrieves a word from the data base")
-    public WordResponse getWord() {
-        return wordsService.getRandomWord();
+    @Operation(summary = "Get random words", description = "Retrieves several words from the data base")
+    public ListWordResponse getWords(@PathVariable @Valid Long userId) {
+        return wordsService.getRandomWords(userId);
     }
 }

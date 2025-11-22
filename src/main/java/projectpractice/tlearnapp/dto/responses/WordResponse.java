@@ -1,4 +1,4 @@
-package projectpractice.tlearnapp.dto;
+package projectpractice.tlearnapp.dto.responses;
 
 public record WordResponse(String word,
                               String transcription,
