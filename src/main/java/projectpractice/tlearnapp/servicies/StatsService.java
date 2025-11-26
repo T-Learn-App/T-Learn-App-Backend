@@ -10,7 +10,6 @@ import projectpractice.tlearnapp.entities.Stat;
 import projectpractice.tlearnapp.entities.StatQueue;
 import projectpractice.tlearnapp.entities.User;
 import projectpractice.tlearnapp.entities.Word;
-import projectpractice.tlearnapp.enums.StatQueueStatus;
 import projectpractice.tlearnapp.exceptions.DataNotFoundException;
 import projectpractice.tlearnapp.mappers.StatsMapper;
 import projectpractice.tlearnapp.repositories.StatQueueRepository;
@@ -47,11 +46,11 @@ public class StatsService {
         Word word = wordsRepository.findById(statQueueDto.wordId()).orElseThrow(DataNotFoundException::new);
         User user = usersRepository.findById(statQueueDto.userId()).orElseThrow(DataNotFoundException::new);
         try {
-            statQueueRepository.save(StatQueue.builder().user(user).word(word).status(StatQueueStatus.ACCEPTED).build());
+            statQueueRepository.save(StatQueue.builder().user(user).word(word).status(StatQueue.Status.ACCEPTED).build());
         } catch (Exception e) {
             String errorMessage = e.getMessage();
             statQueueRepository.save(
-                    StatQueue.builder().user(user).word(word).status(StatQueueStatus.ERROR).error(errorMessage).build());
+                    StatQueue.builder().user(user).word(word).status(StatQueue.Status.ERROR).error(errorMessage).build());
             log.error("error during statQueue saving: {}", e.getClass().getSimpleName());
         }
         log.info("word: {} was sent successfully for user: {}", word.getWord(), user.getEmail());

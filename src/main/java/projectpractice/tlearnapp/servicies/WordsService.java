@@ -28,16 +28,34 @@ public class WordsService {
     public ListWordResponse getRandomWords(Long userId) {
         List<Word> words = wordsRepository.findRandomWords();
         log.info("words were taken successfully");
-        ListWordResponse response = new ListWordResponse(userId, new ArrayList<>());
+        ListWordResponse response = getWordResponses(userId, words);
 
         // make the rotation
         List<Stat> rotation = statsRepository.findRotationStatsByUserId(userId);
-
-        for (Word word : words) {
-            response.words().add(wordMapper.toWordResponse(word));
-        }
         for (Stat stat : rotation) {
             Word word = wordsRepository.findById(stat.getWord().getId()).orElse(null);
+            response.words().add(wordMapper.toWordResponse(word));
+        }
+        return response;
+    }
+
+    public ListWordResponse getRandomWordsByCategory(Long userId, String category) {
+        List<Word> words = wordsRepository.findByCategory(category);
+        log.info("words by category were taken successfully");
+        ListWordResponse response = getWordResponses(userId, words);
+
+        // make the rotation
+        List<Stat> rotation = statsRepository.findRotationStatsByCategory(userId, category);
+        for (Stat stat : rotation) {
+            Word word = wordsRepository.findById(stat.getWord().getId()).orElse(null);
+            response.words().add(wordMapper.toWordResponse(word));
+        }
+        return response;
+    }
+
+    private ListWordResponse getWordResponses(Long userId, List<Word> words) {
+        ListWordResponse response = new ListWordResponse(userId, new ArrayList<>());
+        for (Word word : words) {
             response.words().add(wordMapper.toWordResponse(word));
         }
         return response;

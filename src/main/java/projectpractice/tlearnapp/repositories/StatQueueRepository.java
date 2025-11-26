@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import projectpractice.tlearnapp.entities.StatQueue;
-import projectpractice.tlearnapp.enums.StatQueueStatus;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ public interface StatQueueRepository extends JpaRepository<StatQueue, Long> {
             WHERE status = :status FOR UPDATE SKIP LOCKED LIMIT #butchSize
             """,
             nativeQuery = true)
-    List<StatQueue> findByStatusLocked(Integer butchSize, StatQueueStatus status);
+    List<StatQueue> findByStatusLocked(Integer butchSize, StatQueue.Status status);
 
     @Modifying
     @Query(value = """
@@ -28,5 +27,5 @@ public interface StatQueueRepository extends JpaRepository<StatQueue, Long> {
         DELETE FROM stat_queue
         WHERE id IN (SELECT id FROM cte_limit);
         """, nativeQuery = true)
-    void deleteByStatusOrState(@Param("status") StatQueueStatus status, @Param("limit") Long limit);
+    void deleteByStatusOrState(@Param("status") StatQueue.Status status, @Param("limit") Long limit);
 }

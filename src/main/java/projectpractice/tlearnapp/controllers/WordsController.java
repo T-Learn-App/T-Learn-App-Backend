@@ -35,4 +35,15 @@ public class WordsController {
     public ListWordResponse getWords(@PathVariable @Valid Long userId) {
         return wordsService.getRandomWords(userId);
     }
+
+    @GetMapping("/{userId}/{category}")
+    @ApiResponses({
+            @ApiResponse(description = "gives english words", responseCode = "200"),
+            @ApiResponse(description = "words weren't found", responseCode = "404"),
+            @ApiResponse(description = "an error occurred", responseCode = "500")
+    })
+    @Operation(summary = "Get random words by category", description = "Retrieves several words by category from the data base")
+    public ListWordResponse getWordsByCategory(@PathVariable @Valid Long userId, @PathVariable @Valid String category) {
+        return wordsService.getRandomWordsByCategory(userId, category);
+    }
 }

@@ -14,3 +14,6 @@ jobs:
     cron: "0 0 0 * * *"
     batch-size: 100
     iteration-size: 50
+
+batch:
+  size: 30
