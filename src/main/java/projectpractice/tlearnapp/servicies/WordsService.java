@@ -39,13 +39,13 @@ public class WordsService {
         return response;
     }
 
-    public ListWordResponse getRandomWordsByCategory(Long userId, String category) {
-        List<Word> words = wordsRepository.findByCategory(category);
+    public ListWordResponse getRandomWordsByCategory(Long userId, Long categoryId) {
+        List<Word> words = wordsRepository.findByCategoryId(categoryId);
         log.info("words by category were taken successfully");
         ListWordResponse response = getWordResponses(userId, words);
 
         // make the rotation
-        List<Stat> rotation = statsRepository.findRotationStatsByCategory(userId, category);
+        List<Stat> rotation = statsRepository.findRotationStatsByCategory(userId, categoryId);
         for (Stat stat : rotation) {
             Word word = wordsRepository.findById(stat.getWord().getId()).orElse(null);
             response.words().add(wordMapper.toWordResponse(word));

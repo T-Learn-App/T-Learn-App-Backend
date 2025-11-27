@@ -41,16 +41,14 @@ public interface StatsRepository extends JpaRepository<Stat, Long> {
 
     @Modifying
     @Query(value = """
-            WITH rotation_words_by_category AS (
-                DELETE FROM stats WHERE id IN (
-                SELECT * FROM stats s
-                JOIN words w ON s.word_id = w.id
-                JOIN categories c ON w.category_id = c.id
-                WHERE s.user_id = :userId AND s.attempts >= 3 AND s.updated_at > NOW() - 7 AND c.name = :category
-                LIMIT 2)
-                RETURNING *
-            )
-            SELECT * FROM rotation_words_by_category
+                   WITH rotation_words AS (
+                       DELETE FROM stats WHERE id IN (
+                       SELECT * FROM stats
+                       WHERE user_id = :userId AND attempts >= 3 AND updated_at > NOW() - 7 AND category_id = :categoryId
+                       LIMIT 2)
+                       RETURNING *
+                   )
+                   SELECT * FROM rotation_words
             """, nativeQuery = true)
-    List<Stat> findRotationStatsByCategory(@Param("userId") Long userId, @Param("category") String category);
+    List<Stat> findRotationStatsByCategory(@Param("userId") Long userId, @Param("categoryId") Long categoryId);
 }

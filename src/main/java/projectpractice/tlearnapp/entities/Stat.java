@@ -2,6 +2,7 @@ package projectpractice.tlearnapp.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -32,4 +33,8 @@ public class Stat extends AuditableBaseEntity implements Serializable {
 
     @Column(nullable = false)
     private StatsStatus status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
 }

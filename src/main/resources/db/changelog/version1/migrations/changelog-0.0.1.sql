@@ -16,7 +16,9 @@ CREATE TABLE IF NOT EXISTS words (
     transcription VARCHAR(255) NOT NULL,
     translation VARCHAR(255) NOT NULL,
     partOfSpeech VARCHAR(100) NOT NULL,
-    CONSTRAINT uk_unique_word_combination UNIQUE (word, transcription, translation, partOfSpeech)
+    category_id BIGINT NOT NULL,
+    CONSTRAINT fk_word_category FOREIGN KEY (category_id) REFERENCES categories(id),
+    CONSTRAINT uk_unique_word_combination UNIQUE (word, transcription, translation, partOfSpeech, category_id)
 );
 --rollback drop table words
 
@@ -47,11 +49,13 @@ CREATE TABLE IF NOT EXISTS stats (
     word_id BIGINT NOT NULL,
     attempts INT NOT NULL CHECK ( attempts >= 0 AND attempts < 4),
     status VARCHAR(255) NOT NULL,
+    category_id BIGINT NOT NULL,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP,
     CONSTRAINT uk_unique_id_combination UNIQUE (user_id, word_id),
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id),
-    CONSTRAINT fk_word_id FOREIGN KEY (word_id) REFERENCES words(id)
+    CONSTRAINT fk_word_id FOREIGN KEY (word_id) REFERENCES words(id),
+    CONSTRAINT fk_category_id FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 --rollback drop table stats
 
