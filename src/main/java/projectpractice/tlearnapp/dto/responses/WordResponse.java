@@ -1,7 +1,8 @@
 package projectpractice.tlearnapp.dto.responses;
 
-public record GetWordResponse(String word,
+public record WordResponse(String word,
                               String transcription,
                               String translation,
-                              String partOfSpeech) {
+                              String partOfSpeech,
+                              Long category) {
 }

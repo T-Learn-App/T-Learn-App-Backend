@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import projectpractice.tlearnapp.dto.responses.GetWordResponse;
+import projectpractice.tlearnapp.dto.responses.WordResponse;
 import projectpractice.tlearnapp.exceptions.DataNotFoundException;
 import projectpractice.tlearnapp.exceptions.InvalidRequestException;
 import projectpractice.tlearnapp.servicies.WordsService;
@@ -27,21 +27,22 @@ public class WordsControllerTest {
     @MockitoBean
     private WordsService wordService;
 
-    private GetWordResponse response;
+    private WordResponse response;
 
     @BeforeEach
     void setUp() {
-        response = new GetWordResponse(
+        response = new WordResponse(
                 "testWord",
                 "testTranscription",
                 "testTranslation",
-                "testPartOfSpeech");
+                "testPartOfSpeech",
+                1L);
     }
 
     @Test
     public void getWordReturnOk() throws Exception {
 
-        when(wordService.getRandomWord()).thenReturn(response);
+        when(wordService.getRandomWords(1L)).thenReturn(response);
 
         mockMvc.perform(get("/words"))
                 .andExpect(status().isOk())
@@ -54,7 +55,7 @@ public class WordsControllerTest {
     @Test
     public void getWordReturnNotFound() throws Exception {
 
-        when(wordService.getRandomWord()).thenThrow(DataNotFoundException.class);
+        when(wordService.getRandomWords()).thenThrow(DataNotFoundException.class);
 
         mockMvc.perform(get("/words"))
                 .andExpect(status().isNotFound())
@@ -66,7 +67,7 @@ public class WordsControllerTest {
     @Test
     public void getWordReturnBadRequest() throws Exception {
 
-        when(wordService.getRandomWord()).thenThrow(InvalidRequestException.class);
+        when(wordService.getRandomWords()).thenThrow(InvalidRequestException.class);
 
         mockMvc.perform(get("/words"))
                 .andExpect(status().isBadRequest())

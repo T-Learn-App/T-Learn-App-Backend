@@ -2,17 +2,12 @@ package projectpractice.tlearnapp.repositories;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import projectpractice.tlearnapp.TestConfig;
+import projectpractice.tlearnapp.entities.Category;
 import projectpractice.tlearnapp.entities.Word;
 
 import java.util.Optional;
@@ -34,10 +29,11 @@ public class WordsRepositoryTest {
                 "testWord",
                 "testTranscription",
                 "testTranslation",
-                "testPartOfSpeech");
+                "testPartOfSpeech",
+                new Category());
         wordsRepository.save(word);
 
-        Optional<Word> wordOptional = wordsRepository.findRandomWord();
+        Optional<Word> wordOptional = wordsRepository.findRandomWords();
 
         assertThat(wordOptional).isPresent();
         assertThat(wordOptional.get().getWord()).isEqualTo(word.getWord());

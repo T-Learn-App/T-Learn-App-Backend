@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: T-Learn-App
+  datasource:
+    url: {$DB_URL:jdbc:postgresql://localhost:5432/t-learn-app}
+    username: {$DB_USERNAME:postgres}
+    password: {$DB_PASSWORD:12345}
+
+  liquibase:
+    enabled: true
+    change-log: db/changelog/db.changelog-master.xml
+    default-schema: public
+
+jobs:
+  StatQueueJob:
+    enabled: true
+    cron: "0 0 0 * * *"
+    batch-size: 100
+    iteration-size: 50
+
+batch:
+  size: 30
