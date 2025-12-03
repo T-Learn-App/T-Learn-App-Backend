@@ -12,18 +12,7 @@ import projectpractice.tlearnapp.entities.Word;
 @Mapper(componentModel = "spring")
 public interface StatsMapper {
 
+     @Mapping(source = "user.id", target = "userId")
+     @Mapping(source = "word.id", target = "wordId")
      StatsDto toStatsDto(Stat stat);
-
-//    @Mapping(target = "user", ignore = true)
-//    @Mapping(target = "word", ignore = true)
-//    @Mapping(target = "status", expression = "java(projectpractice.tlearnapp.enums.StatQueueStatus.ACCEPTED)")
-//    @Mapping(target = "error", ignore = true)
-//    StatQueue toStatQueueHelper(StatQueueDto statQueueDto);
-//
-//    default StatQueue toStatQueue(StatQueueDto statQueueDto, User user, Word word) {
-//        StatQueue entity = toStatQueueHelper(statQueueDto);
-//        entity.setUser(user);
-//        entity.setWord(word);
-//        return entity;
-//    }
 }

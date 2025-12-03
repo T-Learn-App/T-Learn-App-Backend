@@ -37,6 +37,7 @@ public class StatsService {
         ListStatsDto listStatsDto = new ListStatsDto(new ArrayList<>());
         for (Stat stat : userStat) {
             listStatsDto.stats().add(statsMapper.toStatsDto(stat));
+            log.info("stat of user: {} for word: {} mapped successfully", userId, stat.getWord().getWord());
         }
         return listStatsDto;
     }

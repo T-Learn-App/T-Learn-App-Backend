@@ -32,7 +32,7 @@ public class StatQueueJob implements JobTrigger {
             Optional<Stat> statOptional =
                     statsRepository.findByUserIdAndWordId(userId, wordId);
             if (statOptional.isEmpty()) {
-                statsRepository.save(new Stat(stat.getUser(), stat.getWord(), 0L, StatsStatus.DRAFT));
+                statsRepository.save(new Stat(stat.getUser(), stat.getWord(), 0L, StatsStatus.DRAFT, stat.getWord().getCategory()));
             } else {
                 statsRepository.updateAttemptsAndStatusByUserIdAndWordId(
                         userId, wordId, StatsStatus.getStatus(statOptional.get().getAttempts()));

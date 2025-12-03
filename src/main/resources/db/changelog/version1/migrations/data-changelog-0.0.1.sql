@@ -5,7 +5,10 @@ INSERT INTO categories (name)
 VALUES ('conversational'), ('technologies'), ('slang'), ('finance');
 
 --changeset insert-data:2 dbms:postgresql context:main
-INSERT INTO words (word, transcription, translation, partofspeech, category_id) VALUES
+INSERT INTO users (email, created_at) VALUES ('pavelsenko19@gmail.com', NOW());
+
+--changeset insert-data:3 dbms:postgresql context:main
+INSERT INTO words (word, transcription, translation, part_of_speech, category_id) VALUES
 -- Category 1: Conversional (25 слов)
 ('hello', '/həˈloʊ/', 'привет', 'interjection', 1),
 ('goodbye', '/ɡʊdˈbaɪ/', 'до свидания', 'interjection', 1),

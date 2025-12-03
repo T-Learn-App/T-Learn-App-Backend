@@ -12,6 +12,6 @@ public interface WordsRepository extends JpaRepository<Word, Long> {
     @Query(value = "SELECT * FROM words ORDER BY RANDOM() LIMIT 10", nativeQuery = true)
     List<Word> findRandomWords();
 
-    @Query(value = "SELECT * FROM words WHERE category_id = :categotyId", nativeQuery = true)
+    @Query(value = "SELECT * FROM words WHERE category_id = :categoryId LIMIT 10", nativeQuery = true)
     List<Word> findByCategoryId(@Param("categoryId") Long categoryId);
 }

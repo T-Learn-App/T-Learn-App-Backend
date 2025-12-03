@@ -2,6 +2,8 @@ package projectpractice.tlearnapp.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -32,6 +34,7 @@ public class Stat extends AuditableBaseEntity implements Serializable {
     private Long attempts;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private StatsStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)

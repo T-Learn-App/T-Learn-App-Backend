@@ -28,27 +28,30 @@ public interface StatsRepository extends JpaRepository<Stat, Long> {
                                                   @Param("status") StatsStatus status);
 
     @Modifying
-    @Query(value = """
-                   WITH rotation_words AS (
-                       DELETE FROM stats WHERE id IN (
-                       SELECT * FROM stats s WHERE user_id = :userId AND attempts >= 3 AND updated_at > NOW() - 7
-                       LIMIT 2)
-                       RETURNING *
-                   )
-                   SELECT * FROM rotation_words
-                   """, nativeQuery = true)
+    @Query(value = """ 
+            DELETE FROM stats WHERE id IN (
+            SELECT id FROM stats
+            WHERE user_id = :userId
+            AND attempts >= 3
+            AND updated_at > NOW() - INTERVAL '7 days'
+            LIMIT 2)
+            RETURNING *
+            """, nativeQuery = true)
     List<Stat> findRotationStatsByUserId(@Param("userId") Long userId);
 
     @Modifying
     @Query(value = """
-                   WITH rotation_words AS (
-                       DELETE FROM stats WHERE id IN (
-                       SELECT * FROM stats
-                       WHERE user_id = :userId AND attempts >= 3 AND updated_at > NOW() - 7 AND category_id = :categoryId
-                       LIMIT 2)
-                       RETURNING *
-                   )
-                   SELECT * FROM rotation_words
-            """, nativeQuery = true)
+           WITH rotation_words AS (
+               DELETE FROM stats WHERE id IN (
+               SELECT id FROM stats
+               WHERE user_id = :userId
+               AND attempts >= 3
+               AND updated_at > NOW() - INTERVAL '7 days'
+               AND category_id = :categoryId
+               LIMIT 2)
+               RETURNING *
+           )
+           SELECT * FROM rotation_words
+        """, nativeQuery = true)
     List<Stat> findRotationStatsByCategory(@Param("userId") Long userId, @Param("categoryId") Long categoryId);
 }
