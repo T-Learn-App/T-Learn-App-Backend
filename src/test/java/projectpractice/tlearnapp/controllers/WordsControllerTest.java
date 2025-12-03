@@ -36,13 +36,13 @@ public class WordsControllerTest {
                 "testTranscription",
                 "testTranslation",
                 "testPartOfSpeech",
-                "testCategory");
+                1L);
     }
 
     @Test
     public void getWordReturnOk() throws Exception {
 
-        when(wordService.getRandomWords()).thenReturn(response);
+        when(wordService.getRandomWords(1L)).thenReturn(response);
 
         mockMvc.perform(get("/words"))
                 .andExpect(status().isOk())
