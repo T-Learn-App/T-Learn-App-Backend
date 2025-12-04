@@ -37,17 +37,4 @@ public class UsersController {
     public UserDto getUser(@PathVariable("id") @Valid Long userId) {
         return usersService.getUser(userId);
     }
-
-    @PostMapping("/registration")
-    @ResponseStatus(HttpStatus.CREATED)
-    @ApiResponses(value = {
-            @ApiResponse(description = "user was added successfully", responseCode = "201"),
-            @ApiResponse(description = "invalid request", responseCode = "400"),
-            @ApiResponse(description = "user already exists", responseCode = "409"),
-            @ApiResponse(description = "an error occurred", responseCode = "500")
-    })
-    @Operation(summary = "Add user by email", description = "Add a user data in the data base")
-    public UserDto addUser(@RequestBody @Valid UserDto user) {
-        return usersService.addUser(user.email());
-    }
 }
