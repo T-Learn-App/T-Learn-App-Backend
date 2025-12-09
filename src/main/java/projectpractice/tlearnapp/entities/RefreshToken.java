@@ -2,6 +2,7 @@ package projectpractice.tlearnapp.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ public class RefreshToken extends AuditableBaseEntity {
     private String token;
 
     @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "expiry_date")
