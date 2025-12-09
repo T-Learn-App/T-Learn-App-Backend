@@ -22,10 +22,17 @@ public class JwtHelper {
 
     private final JwtProperties jwtProperties;
 
-    public String createToken(Map<String, Object> claims, String subject) {
-        Date expiryDate =
-                Date.from(Instant.ofEpochMilli(System.currentTimeMillis() +
-                        jwtProperties.getValidity()));
+    public String createToken(Map<String, Object> claims, String subject, TokenType type) {
+        Date expiryDate;
+        if (type.equals(TokenType.ACCESS)) {
+            expiryDate =
+                    Date.from(Instant.ofEpochMilli(System.currentTimeMillis() +
+                            jwtProperties.getAccessTokenValidity()));
+        } else {
+            expiryDate =
+                    Date.from(Instant.ofEpochMilli(System.currentTimeMillis() +
+                            jwtProperties.getRefreshTokenValidity()));
+        }
         Key hmacKey = new SecretKeySpec(Base64.getDecoder()
                 .decode(jwtProperties.getSecretKey()),
                 SignatureAlgorithm.HS256.getJcaName());
@@ -56,10 +63,16 @@ public class JwtHelper {
         final String userName = extractEmail(token);
         return userName.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
+
     private Boolean isTokenExpired(String bearerToken) {
         return extractExpiry(bearerToken).before(new Date());
     }
+
     public Date extractExpiry(String bearerToken) {
         return extractClaimBody(bearerToken, Claims::getExpiration);
+    }
+
+    public enum TokenType {
+        ACCESS, REFRESH
     }
 }

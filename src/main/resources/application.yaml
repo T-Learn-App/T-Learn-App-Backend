@@ -11,6 +11,17 @@ spring:
     change-log: db/changelog/db.changelog-master.xml
     default-schema: public
 
+  security:
+    user:
+      email: libEmail
+      password: libPassword
+
+
+jwt:
+  secret-key: 5JzoMbk6E5qIqHSuBTgeQCARtUsxAkBiHwdjXOSW8kWdXzYmP3X51C0
+  access-token-validity: 600000
+  refresh-token-validity: 100000000000
+
 jobs:
   StatQueueJob:
     enabled: true
@@ -20,3 +31,4 @@ jobs:
 
 batch:
   size: 30
+

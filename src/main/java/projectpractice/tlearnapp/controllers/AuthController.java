@@ -22,8 +22,8 @@ public class AuthController {
         return authService.login(request);
     }
 
-    @PostMapping("/token/create")
-    public AuthResponse createToken(@RequestBody @Valid AuthRequest request) {
+    @PostMapping("/token/refresh")
+    public AuthResponse refreshToken(@RequestBody @Valid AuthRequest request) {
         return authService.generateToken(request);
     }
 }
