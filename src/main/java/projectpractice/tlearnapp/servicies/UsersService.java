@@ -22,14 +22,4 @@ public class UsersService {
         User user = usersRepository.findById(userId).orElseThrow(DataNotFoundException::new);
         return userMapper.toUserDto(user);
     }
-
-    public UserDto addUser(String email) throws ConflictException {
-        if (usersRepository.existsByEmail(email)) {
-            throw new ConflictException("the user already exists");
-        }
-        User user = User.builder().email(email).build();
-        log.info("Adding user: {}", user.getEmail());
-        usersRepository.save(user);
-        return userMapper.toUserDto(user);
-    }
 }

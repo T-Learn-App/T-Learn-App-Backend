@@ -1,6 +1,7 @@
 package projectpractice.tlearnapp.common.api;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -42,6 +43,16 @@ public class AdviceController {
                 400,
                 e.getClass().getSimpleName(),
                 "Invalid request"
+        );
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ApiErrorResponse handleBadCredentialsException(BadCredentialsException e) {
+        return new ApiErrorResponse(
+                401,
+                e.getClass().getSimpleName(),
+                "Bad credentials"
         );
     }
 

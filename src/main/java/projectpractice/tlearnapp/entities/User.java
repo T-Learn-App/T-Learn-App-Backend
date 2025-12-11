@@ -24,4 +24,7 @@ public class User extends AuditableBaseEntity implements Serializable {
 
     @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false)
+    private String password;
 }

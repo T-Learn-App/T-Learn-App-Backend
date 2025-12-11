@@ -43,9 +43,9 @@ public class StatsService {
     }
 
     @Transactional
-    public void markWordAsCompleted(StatQueueDto statQueueDto) {
+    public void markWordAsCompleted(Long userId, StatQueueDto statQueueDto) {
         Word word = wordsRepository.findById(statQueueDto.wordId()).orElseThrow(DataNotFoundException::new);
-        User user = usersRepository.findById(statQueueDto.userId()).orElseThrow(DataNotFoundException::new);
+        User user = usersRepository.findById(userId).orElseThrow(DataNotFoundException::new);
         try {
             statQueueRepository.save(StatQueue.builder().user(user).word(word).status(StatQueue.Status.ACCEPTED).build());
         } catch (Exception e) {

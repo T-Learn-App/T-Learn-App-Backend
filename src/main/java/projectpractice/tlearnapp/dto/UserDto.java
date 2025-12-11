@@ -6,5 +6,6 @@ import jakarta.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 public record UserDto(Long id,
-                      @Email @NotBlank String email) {
+                      @Email @NotBlank String email,
+                      @NotBlank String password) {
 }
