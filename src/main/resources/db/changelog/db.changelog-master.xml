@@ -8,12 +8,12 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="1" author="pavel senko">
-        <sqlFile path="version1/migrations/changelog-0.0.1.sql"
+        <sqlFile path="0.0.1/changelog-0.0.1.sql"
                  relativeToChangelogFile="true"/>
     </changeSet>
 
     <changeSet id="2" author="pavel senko">
-        <sqlFile path="version1/migrations/data-changelog-0.0.1.sql"
+        <sqlFile path="0.0.1/data-changelog-0.0.1.sql"
                  relativeToChangelogFile="true"/>
     </changeSet>
 

@@ -22,7 +22,6 @@ import projectpractice.tlearnapp.security.JwtHelper.TokenType;
 import projectpractice.tlearnapp.security.JwtProperties;
 
 import java.time.Instant;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -102,7 +101,7 @@ public class AuthService {
 
     @Cacheable(value = "userDetails", key = "#email",
             unless = "#result == null")
-    protected UserDetails loadUserByUsernameWithCache(String username) {
+    public UserDetails loadUserByUsernameWithCache(String username) {
         log.info("Loading user details: {}", username);
         return userDetailsService.loadUserByUsername(username);
     }
