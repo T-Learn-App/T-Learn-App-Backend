@@ -11,6 +11,7 @@ import projectpractice.tlearnapp.entities.Word;
 import projectpractice.tlearnapp.mappers.WordMapper;
 import projectpractice.tlearnapp.repositories.StatsRepository;
 import projectpractice.tlearnapp.repositories.WordsRepository;
+import projectpractice.tlearnapp.security.JwtTokenProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +24,11 @@ public class WordsService {
     private final WordsRepository wordsRepository;
     private final StatsRepository statsRepository;
     private final WordMapper wordMapper;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public ListWordResponse getRandomWords(Long userId) {
+    public ListWordResponse getRandomWords(String accessToken) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(accessToken);
         List<Word> words = wordsRepository.findRandomWords();
         log.info("words were taken successfully");
         ListWordResponse response = getWordResponses(userId, words);
@@ -39,7 +42,8 @@ public class WordsService {
         return response;
     }
 
-    public ListWordResponse getRandomWordsByCategory(Long userId, Long categoryId) {
+    public ListWordResponse getRandomWordsByCategory(String accessToken, Long categoryId) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(accessToken);
         List<Word> words = wordsRepository.findByCategoryId(categoryId);
         log.info("words by category were taken successfully");
         ListWordResponse response = getWordResponses(userId, words);

@@ -1,6 +1,7 @@
 package projectpractice.tlearnapp.controllers;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.headers.Header;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,10 +11,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import projectpractice.tlearnapp.dto.responses.ListWordResponse;
 import projectpractice.tlearnapp.security.AuthenticatedUserDetails;
+import projectpractice.tlearnapp.security.JwtTokenProvider;
 import projectpractice.tlearnapp.servicies.WordsService;
 
 @RestController
@@ -32,8 +35,8 @@ public class WordsController {
             @ApiResponse(description = "an error occurred", responseCode = "500")
     })
     @Operation(summary = "Get random words", description = "Retrieves several words from the data base")
-    public ListWordResponse getWords(@AuthenticationPrincipal AuthenticatedUserDetails user) {
-        return wordsService.getRandomWords(user.getUserId());
+    public ListWordResponse getWords(@RequestHeader(name = "Authorization") String accessToken) {
+        return wordsService.getRandomWords(accessToken);
     }
 
     @GetMapping("/categories/{categoryId}")
@@ -43,8 +46,8 @@ public class WordsController {
             @ApiResponse(description = "an error occurred", responseCode = "500")
     })
     @Operation(summary = "Get random words by category", description = "Retrieves several words by category from the data base")
-    public ListWordResponse getWordsByCategoryId(@AuthenticationPrincipal AuthenticatedUserDetails user,
+    public ListWordResponse getWordsByCategoryId(@RequestHeader(name = "Authorization") String accessToken,
                                                  @PathVariable @Valid Long categoryId) {
-        return wordsService.getRandomWordsByCategory(user.getUserId(), categoryId);
+        return wordsService.getRandomWordsByCategory(accessToken, categoryId);
     }
 }

@@ -66,8 +66,11 @@ CREATE TABLE IF NOT EXISTS stats (
 CREATE TABLE IF NOT EXISTS refresh_tokens (
     id BIGSERIAL NOT NULL PRIMARY KEY,
     token VARCHAR(255) NOT NULL UNIQUE,
+    access_token VARCHAR(255) UNIQUE,
     user_id BIGINT NOT NULL UNIQUE,
     expiry_date TIMESTAMP NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
 )
 --rollback drop table stats

@@ -9,13 +9,15 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import projectpractice.tlearnapp.dto.ListStatsDto;
 import projectpractice.tlearnapp.dto.StatQueueDto;
+import projectpractice.tlearnapp.dto.StatsDto;
 import projectpractice.tlearnapp.security.AuthenticatedUserDetails;
 import projectpractice.tlearnapp.servicies.StatsService;
 
@@ -34,8 +36,20 @@ public class StatsController {
             @ApiResponse(description = "an error occurred", responseCode = "500")
     })
     @Operation(summary = "Get all stats of user", description = "Get list of all user stats")
-    public ListStatsDto getStat(@AuthenticationPrincipal AuthenticatedUserDetails user) {
-        return statsService.getStats(user.getUserId());
+    public ListStatsDto getStat(@RequestHeader(name = "Authorization") String accessToken) {
+        return statsService.getStats(accessToken);
+    }
+
+    @PostMapping
+    @ApiResponses({
+            @ApiResponse(description = "stats got successfully", responseCode = "200"),
+            @ApiResponse(description = "days cannot be negative", responseCode = "400"),
+            @ApiResponse(description = "an error occurred", responseCode = "500")
+    })
+    @Operation(summary = "Get all stats of user by filters", description = "Get list of all user stats in the last days")
+    public ListStatsDto getStatsByFilters(@RequestHeader(name = "Authorization") String accessToken,
+                                          @RequestBody StatsDto statsDto) {
+        return statsService.getStatsByLastDays(accessToken, statsDto);
     }
 
     @PutMapping("/complete")
@@ -46,8 +60,8 @@ public class StatsController {
             @ApiResponse(description = "an error occurred", responseCode = "500")
     })
     @Operation(summary = "Mark word as completed", description = "Send word to stats queue for create data in stats")
-    public void completeWord(@AuthenticationPrincipal AuthenticatedUserDetails user,
+    public void completeWord(@RequestHeader(name = "Authorization") String accessToken,
                              @RequestBody @Valid StatQueueDto completedWord) {
-        statsService.markWordAsCompleted(user.getUserId(), completedWord);
+        statsService.markWordAsCompleted(accessToken, completedWord);
     }
 }

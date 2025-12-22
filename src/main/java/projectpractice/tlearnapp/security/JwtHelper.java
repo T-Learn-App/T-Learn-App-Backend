@@ -59,19 +59,6 @@ public class JwtHelper {
                 .build().parseClaimsJws(bearerToken);
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        final String userName = extractEmail(token);
-        return userName.equals(userDetails.getUsername()) && !isTokenExpired(token);
-    }
-
-    private Boolean isTokenExpired(String bearerToken) {
-        return extractExpiry(bearerToken).before(new Date());
-    }
-
-    public Date extractExpiry(String bearerToken) {
-        return extractClaimBody(bearerToken, Claims::getExpiration);
-    }
-
     public enum TokenType {
         ACCESS, REFRESH
     }

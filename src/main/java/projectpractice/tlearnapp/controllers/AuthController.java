@@ -9,12 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import projectpractice.tlearnapp.dto.requests.AuthRequest;
 import projectpractice.tlearnapp.dto.responses.AuthResponse;
 import projectpractice.tlearnapp.servicies.AuthService;
 
-@RestController("auth")
+@RestController
+@RequestMapping("/auth")
 @Validated
 @RequiredArgsConstructor
 @Tag(name = "Auth Management", description = "Operations related to authentication management")
@@ -30,7 +32,7 @@ public class AuthController {
     })
     @Operation(summary = "Logins or signs up a user", description = "Adds a user to data base and gives him refresh and access jwt token")
     public AuthResponse login(@RequestBody @Valid AuthRequest request) {
-        return authService.login(request);
+        return authService.registerOrLogin(request);
     }
 
     @PostMapping("/token/refresh")
@@ -40,6 +42,6 @@ public class AuthController {
             @ApiResponse(description = "an error occurred", responseCode = "500")
     })
     public AuthResponse refreshToken(@RequestBody @Valid AuthRequest request) {
-        return authService.generateAccessToken(request);
+        return authService.refreshToken(request.getRefreshToken());
     }
 }

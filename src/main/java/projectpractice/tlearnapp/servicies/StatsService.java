@@ -6,16 +6,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import projectpractice.tlearnapp.dto.ListStatsDto;
 import projectpractice.tlearnapp.dto.StatQueueDto;
+import projectpractice.tlearnapp.dto.StatsDto;
 import projectpractice.tlearnapp.entities.Stat;
 import projectpractice.tlearnapp.entities.StatQueue;
 import projectpractice.tlearnapp.entities.User;
 import projectpractice.tlearnapp.entities.Word;
 import projectpractice.tlearnapp.exceptions.DataNotFoundException;
+import projectpractice.tlearnapp.exceptions.InvalidRequestException;
 import projectpractice.tlearnapp.mappers.StatsMapper;
 import projectpractice.tlearnapp.repositories.StatQueueRepository;
 import projectpractice.tlearnapp.repositories.StatsRepository;
 import projectpractice.tlearnapp.repositories.UsersRepository;
 import projectpractice.tlearnapp.repositories.WordsRepository;
+import projectpractice.tlearnapp.security.JwtTokenProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,19 +34,26 @@ public class StatsService {
     private final UsersRepository usersRepository;
     private final WordsRepository wordsRepository;
     private final StatsMapper statsMapper;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public ListStatsDto getStats(Long userId) {
+    public ListStatsDto getStats(String accessToken) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(accessToken);
         List<Stat> userStat = statsRepository.findAllByUserId(userId);
-        ListStatsDto listStatsDto = new ListStatsDto(new ArrayList<>());
-        for (Stat stat : userStat) {
-            listStatsDto.stats().add(statsMapper.toStatsDto(stat));
-            log.info("stat of user: {} for word: {} mapped successfully", userId, stat.getWord().getWord());
+        return makeListStatsDtoFromStat(userStat);
+    }
+
+    public ListStatsDto getStatsByLastDays(String accessToken, StatsDto statsDto) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(accessToken);
+        if (statsDto.getLastDays() < 0) {
+            throw new InvalidRequestException("Days cannot be negative");
         }
-        return listStatsDto;
+        List<Stat> userStat = statsRepository.findAllByUserIdAndLastDays(userId, statsDto.getLastDays());
+        return makeListStatsDtoFromStat(userStat);
     }
 
     @Transactional
-    public void markWordAsCompleted(Long userId, StatQueueDto statQueueDto) {
+    public void markWordAsCompleted(String accessToken, StatQueueDto statQueueDto) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(accessToken);
         Word word = wordsRepository.findById(statQueueDto.wordId()).orElseThrow(DataNotFoundException::new);
         User user = usersRepository.findById(userId).orElseThrow(DataNotFoundException::new);
         try {
@@ -55,5 +65,14 @@ public class StatsService {
             log.error("error during statQueue saving: {}", e.getClass().getSimpleName());
         }
         log.info("word: {} was sent successfully for user: {}", word.getWord(), user.getEmail());
+    }
+
+    private ListStatsDto makeListStatsDtoFromStat(List<Stat> stats) {
+        ListStatsDto listStatsDto = new ListStatsDto(new ArrayList<>());
+        for (Stat stat : stats) {
+            listStatsDto.stats().add(statsMapper.toStatsDto(stat));
+            log.info("stat for word: {} mapped successfully", stat.getWord().getWord());
+        }
+        return listStatsDto;
     }
 }

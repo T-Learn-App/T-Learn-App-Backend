@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +37,7 @@ public class UsersController {
             @ApiResponse(description = "an error occurred", responseCode = "500")
     })
     @Operation(summary = "Get user by id", description = "Retrieves a user by their unique identifier")
-    public UserDto getUser(@AuthenticationPrincipal AuthenticatedUserDetails user) {
-        return usersService.getUser(user.getUserId());
+    public UserDto getUser(@RequestHeader(name = "Authorization") String accessToken) {
+        return usersService.getUser(accessToken);
     }
 }

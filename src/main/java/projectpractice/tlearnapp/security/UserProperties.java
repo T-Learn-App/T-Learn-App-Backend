@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "security.user")
+@ConfigurationProperties(prefix = "spring.security.user")
 @Data
 public class UserProperties {
     private String email;

@@ -2,9 +2,9 @@ spring:
   application:
     name: T-Learn-App
   datasource:
-    url: {$DB_URL:jdbc:postgresql://localhost:5432/t-learn-app}
-    username: {$DB_USERNAME:postgres}
-    password: {$DB_PASSWORD:12345}
+    url: jdbc:postgresql://localhost:5432/t-learn-app
+    username: postgres
+    password: 12345
 
   liquibase:
     enabled: true
@@ -13,12 +13,12 @@ spring:
 
   security:
     user:
-      email: libEmail
-      password: libPassword
+      email: pashok00077@mail.ru
+      password: 123456789
 
 
 jwt:
-  secret-key: 5JzoMbk6E5qIqHSuBTgeQCARtUsxAkBiHwdjXOSW8kWdXzYmP3X51C0
+  secret-key: "7VQ8u9zP2aBc4D3eF6gH1jK5lM7nO0pQ3rS5tU8vW2xY4zA6bC8dE0fG2hI4jL6mN9oP1qR3sT5uV7wX9yZ1aB3cD5eF7gH9jK1lM3nO5pQ7rS9tU1vW3xY5zA7bC9dE1fG3hI5jL7mN1oP3qR5sT7uV1wX3yZ5aB7cD1eF3gH5jK7lM1nO3pQ5rS7tU3vW5xY7zA1bC3dE5fG7hI1jL3mN5oP7qR1sT3uV5wX7yZ1aB5cD3eF5gH7jK3lM5nO7pQ1rS3tU5vW7xY1zA3bC5dE7fG1hI3jL5mN7oP1qR3sT5uV7wX9yZ"
   access-token-validity: 600000
   refresh-token-validity: 100000000000
 

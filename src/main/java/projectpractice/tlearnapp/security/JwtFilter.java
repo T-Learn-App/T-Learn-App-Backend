@@ -1,6 +1,5 @@
 package projectpractice.tlearnapp.security;
 
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -14,8 +13,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -32,7 +29,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final AuthUserDetailsService userDetailsService;
-    private final JwtHelper jwtHelper;
+    private final JwtTokenProvider jwtProvider;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -47,7 +44,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (Objects.nonNull(authorizationHeader) &&
                     authorizationHeader.startsWith("Bearer ")) {
                 jwt = authorizationHeader.substring(7); // length of “Bearer “
-                email = jwtHelper.extractEmail(jwt);
+                email = jwtProvider.parseToken(jwt).getSubject();
             }
 
             if (Objects.nonNull(email) &&
@@ -78,7 +75,7 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
-        final String userName = jwtHelper.extractEmail(token);
+        final String userName = jwtProvider.parseToken(token).getSubject();
         return userName.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
@@ -87,6 +84,6 @@ public class JwtFilter extends OncePerRequestFilter {
     }
 
     public Date extractExpiry(String bearerToken) {
-        return jwtHelper.extractClaimBody(bearerToken, Claims::getExpiration);
+        return jwtProvider.parseToken(bearerToken).getExpiration();
     }
 }

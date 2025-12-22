@@ -9,6 +9,7 @@ import projectpractice.tlearnapp.exceptions.ConflictException;
 import projectpractice.tlearnapp.exceptions.DataNotFoundException;
 import projectpractice.tlearnapp.mappers.UserMapper;
 import projectpractice.tlearnapp.repositories.UsersRepository;
+import projectpractice.tlearnapp.security.JwtTokenProvider;
 
 @Service
 @AllArgsConstructor
@@ -17,8 +18,10 @@ public class UsersService {
 
     private final UsersRepository usersRepository;
     private final UserMapper userMapper;
+    private final JwtTokenProvider jwtTokenProvider;
 
-    public UserDto getUser(Long userId) {
+    public UserDto getUser(String accessToken) {
+        Long userId = jwtTokenProvider.getUserIdFromToken(accessToken);
         User user = usersRepository.findById(userId).orElseThrow(DataNotFoundException::new);
         return userMapper.toUserDto(user);
     }

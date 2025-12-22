@@ -5,7 +5,7 @@ INSERT INTO categories (name)
 VALUES ('conversational'), ('technologies'), ('slang'), ('finance');
 
 --changeset insert-data:2 dbms:postgresql context:main
-INSERT INTO users (email, created_at) VALUES ('pavelsenko19@gmail.com', NOW());
+INSERT INTO users (email, password, created_at) VALUES ('pavelsenko19@gmail.com', '12345', NOW());
 
 --changeset insert-data:3 dbms:postgresql context:main
 INSERT INTO words (word, transcription, translation, part_of_speech, category_id) VALUES
