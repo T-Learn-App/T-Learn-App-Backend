@@ -72,5 +72,18 @@ CREATE TABLE IF NOT EXISTS refresh_tokens (
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP NOT NULL,
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
-)
+);
+--rollback drop table refresh_
+
+--changeset create-table:6 dbms:postgresql context:main
+CREATE TABLE IF NOT EXISTS leader_board (
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    user_id BIGSERIAL NOT NULL,
+    season_id BIGSERIAL NOT NULL,
+    total_score INTEGER NOT NULL,
+    created_at TIMESTAMP NOT NULL,
+    updated_at TIMESTAMP NOT NULL,
+    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
+);
 --rollback drop table stats
+
