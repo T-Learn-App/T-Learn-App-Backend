@@ -56,11 +56,16 @@ public class JwtTokenProvider {
         Date issuedAt = new Date();
         Date expiration = new Date(issuedAt.getTime() + expirationMillis);
 
-        return Jwts.builder()
-                .setClaims(claims)
+        JwtBuilder builder = Jwts.builder()
                 .setSubject(subject)
                 .setIssuedAt(issuedAt)
-                .setExpiration(expiration)
+                .setExpiration(expiration);
+
+        if (claims != null && !claims.isEmpty()) {
+            builder.addClaims(claims);
+        }
+
+        return builder
                 .signWith(key, algorithm)
                 .compact();
     }
