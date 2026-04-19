@@ -37,13 +37,19 @@ public class AuthService {
         String email = request.getEmail();
         String password = request.getPassword();
 
+        log.info("LOGIN request email=[{}]", email);
+
         Optional<User> optionalUser = userRepository.findByEmail(email);
+        log.info("User exists in DB: {}", optionalUser.isPresent());
 
         if (optionalUser.isEmpty()) {
-            return createAndSaveTokens(createUser(email, password));
+            User created = createUser(email, password);
+            log.info("Created user id={}, email={}", created.getId(), created.getEmail());
+            return createAndSaveTokens(created);
         }
 
         User user = optionalUser.get();
+        log.info("Found user id={}, email={}", user.getId(), user.getEmail());
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Wrong password");
@@ -90,10 +96,24 @@ public class AuthService {
     }
 
     private User createUser(String email, String password) {
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email is blank");
+        }
+        if (password == null || password.isBlank()) {
+            throw new IllegalArgumentException("Password is blank");
+        }
+
+        String normalizedEmail = email.trim().toLowerCase();
+
+        if (userRepository.existsByEmail(normalizedEmail)) {
+            throw new IllegalStateException("User already exists: " + normalizedEmail);
+        }
+
         User user = User.builder()
-                .email(email)
+                .email(normalizedEmail)
                 .password(passwordEncoder.encode(password))
                 .build();
+
         return userRepository.save(user);
     }
 

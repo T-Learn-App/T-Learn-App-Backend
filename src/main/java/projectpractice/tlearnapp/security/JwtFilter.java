@@ -42,6 +42,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
             if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 String email = jwtProvider.parseToken(token).getSubject();
+                log.info("JWT subject(email) = [{}]", email);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
