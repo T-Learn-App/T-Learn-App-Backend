@@ -1,8 +1,7 @@
 package projectpractice.tlearnapp.security;
 
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.DecodingException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +18,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Objects;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
@@ -36,42 +34,53 @@ public class JwtFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
+
         try {
             log.info("Inside JWT filter");
-            final String authorizationHeader = request.getHeader(AUTHORIZATION);
-            String jwt = null;
-            String email = null;
-            if (Objects.nonNull(authorizationHeader) &&
-                    authorizationHeader.startsWith("Bearer ")) {
-                jwt = authorizationHeader.substring(7); // length of “Bearer “
-                email = jwtProvider.parseToken(jwt).getSubject();
-            }
 
-            if (Objects.nonNull(email) &&
-                    SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails =
-                        this.userDetailsService.loadUserByUsername(email);
-                boolean isTokenValidated =
-                        validateToken(jwt, userDetails);
-                if (isTokenValidated) {
-                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+            String token = resolveToken(request);
+
+            if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                String email = jwtProvider.parseToken(token).getSubject();
+
+                UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+
+                if (validateToken(token, userDetails)) {
+                    UsernamePasswordAuthenticationToken auth =
                             new UsernamePasswordAuthenticationToken(
                                     userDetails, null, userDetails.getAuthorities());
-                    usernamePasswordAuthenticationToken.setDetails(
-                            new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(
-                            usernamePasswordAuthenticationToken);
+
+                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             }
-        } catch (ExpiredJwtException jwtException) {
-            request.setAttribute("exception", jwtException);
+
+        } catch (ExpiredJwtException e) {
+            request.setAttribute("exception", e);
         } catch (BadCredentialsException |
                  UnsupportedJwtException |
-                 MalformedJwtException e) {
+                 MalformedJwtException |
+                 DecodingException |
+                 IllegalArgumentException e) {
             log.error("Filter exception: {}", e.getMessage());
             request.setAttribute("exception", e);
         }
+
         filterChain.doFilter(request, response);
+    }
+
+    private String resolveToken(HttpServletRequest request) {
+        String header = request.getHeader(AUTHORIZATION);
+        if (header == null) return null;
+
+        header = header.trim();
+
+        if (header.startsWith("Bearer ")) {
+            String token = header.substring(7).trim();
+            return token.isEmpty() ? null : token;
+        }
+
+        return header.isEmpty() ? null : header;
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {
@@ -79,11 +88,11 @@ public class JwtFilter extends OncePerRequestFilter {
         return userName.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    private Boolean isTokenExpired(String bearerToken) {
-        return extractExpiry(bearerToken).before(new Date());
+    private boolean isTokenExpired(String token) {
+        return extractExpiry(token).before(new Date());
     }
 
-    public Date extractExpiry(String bearerToken) {
-        return jwtProvider.parseToken(bearerToken).getExpiration();
+    public Date extractExpiry(String token) {
+        return jwtProvider.parseToken(token).getExpiration();
     }
 }
