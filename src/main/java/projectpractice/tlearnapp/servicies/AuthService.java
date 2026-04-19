@@ -19,6 +19,7 @@ import projectpractice.tlearnapp.security.JwtTokenProvider;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,10 +37,13 @@ public class AuthService {
         String email = request.getEmail();
         String password = request.getPassword();
 
-        User user = userRepository.findByEmail(email).get();
-        if (user == null) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+
+        if (optionalUser.isEmpty()) {
             return createAndSaveTokens(createUser(email, password));
         }
+
+        User user = optionalUser.get();
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("Wrong password");
