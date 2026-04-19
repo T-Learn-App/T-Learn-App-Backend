@@ -54,11 +54,9 @@ public class AuthService {
 
     @Transactional
     public void register(String email, String password) {
-
         if (userRepository.existsByEmail(email)) {
-            throw new InvalidRequestException("user already exists: " + email);
+            throw new InvalidRequestException("User already exists: " + email);
         }
-
         createUser(email, password);
     }
 
@@ -67,13 +65,11 @@ public class AuthService {
         String email = authRequest.getEmail();
         String password = authRequest.getPassword();
 
-        User user = userRepository.findByEmail(email).get();
-        if (user == null) {
-            throw new InvalidRequestException("user already exists: " + email);
-        }
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new InvalidRequestException("User not found: " + email));
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new InvalidRequestException("invalid password");
+            throw new BadCredentialsException("Invalid password");
         }
 
         return createAndSaveTokens(user);
@@ -81,14 +77,12 @@ public class AuthService {
 
     @Transactional(noRollbackFor = RefreshTokenExpiredException.class)
     public AuthResponse refreshToken(String refreshToken) {
-        RefreshToken token = refreshTokenRepository.findByToken(refreshToken).get();
-        if (token == null) {
-            throw new InvalidRequestException("invalid token");
-        }
+        RefreshToken token = refreshTokenRepository.findByToken(refreshToken)
+                .orElseThrow(() -> new InvalidRequestException("Invalid or expired refresh token"));
 
         if (token.getExpiryDate().isBefore(LocalDateTime.now())) {
             refreshTokenRepository.delete(token);
-            throw new RefreshTokenExpiredException("refresh token expired");
+            throw new RefreshTokenExpiredException("Refresh token expired");
         }
 
         refreshTokenRepository.delete(token);
@@ -96,8 +90,10 @@ public class AuthService {
     }
 
     private User createUser(String email, String password) {
-        User user = User.builder().email(email).password(password).build();
-
+        User user = User.builder()
+                .email(email)
+                .password(passwordEncoder.encode(password))
+                .build();
         return userRepository.save(user);
     }
 
@@ -111,15 +107,21 @@ public class AuthService {
         refreshTokenRepository.deleteByUser(user);
 
         RefreshToken savedRefreshToken = new RefreshToken();
-        LocalDateTime expiryDate = LocalDateTime.now().plus(jwtProperty.getRefreshTokenValidity(), ChronoUnit.MILLIS);
+        LocalDateTime expiryDate = LocalDateTime.now()
+                .plus(jwtProperty.getRefreshTokenValidity(), ChronoUnit.MILLIS);
+
         savedRefreshToken.setAccessToken(accessToken);
         savedRefreshToken.setUser(user);
         savedRefreshToken.setToken(refreshToken);
-        log.info("expiry time: {}", expiryDate);
-        savedRefreshToken.setExpiryDate(expiryDate);
 
+        log.info("expiry time: {}", expiryDate);
+
+        savedRefreshToken.setExpiryDate(expiryDate);
         savedRefreshToken = refreshTokenRepository.save(savedRefreshToken);
 
-        return AuthResponse.builder().accessToken(accessToken).refreshToken(savedRefreshToken.getToken()).build();
+        return AuthResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(savedRefreshToken.getToken())
+                .build();
     }
 }
