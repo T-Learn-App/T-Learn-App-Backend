@@ -40,8 +40,21 @@ public class JwtFilter extends OncePerRequestFilter {
 
             String token = resolveToken(request);
 
-            if (token != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                String email = jwtProvider.parseToken(token).getSubject();
+            if (token == null) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                Claims claims = jwtProvider.parseToken(token);
+
+                if (claims == null || claims.getSubject() == null) {
+                    log.warn("Invalid token: claims or subject is null");
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+
+                String email = claims.getSubject();
                 log.info("JWT subject(email) = [{}]", email);
 
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
@@ -57,6 +70,7 @@ public class JwtFilter extends OncePerRequestFilter {
             }
 
         } catch (ExpiredJwtException e) {
+            log.warn("Token expired: {}", e.getMessage());
             request.setAttribute("exception", e);
         } catch (BadCredentialsException |
                  UnsupportedJwtException |
