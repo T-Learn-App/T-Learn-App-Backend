@@ -13,8 +13,8 @@ spring:
 
   security:
     user:
-      email: pashok00077@mail.ru
-      password: 123456789
+      email: pashok00@mail.ru
+      password: Qwerty123456!
 
 
 jwt:

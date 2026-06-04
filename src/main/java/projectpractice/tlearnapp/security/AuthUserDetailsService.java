@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
+import projectpractice.tlearnapp.repositories.UsersRepository;
 
 import java.util.ArrayList;
 
@@ -14,19 +15,20 @@ import java.util.ArrayList;
 @RequiredArgsConstructor
 public class AuthUserDetailsService implements UserDetailsService {
 
-    private final UserProperties userProperties;
+    private final UsersRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username)
-            throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) {
+        String email = username == null ? "" : username.trim();
 
-        if (StringUtils.isEmpty(username) ||
-                !username.equals(userProperties.getEmail())) {
-            throw new UsernameNotFoundException(
-                    String.format("User not found, or unauthorized %s", username));
-        }
+        projectpractice.tlearnapp.entities.User user = userRepository.findByEmail(email)
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found: " + email));
 
-        return new User(userProperties.getEmail(),
-                userProperties.getPassword(), new ArrayList<>());
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                java.util.Collections.emptyList()
+        );
     }
 }

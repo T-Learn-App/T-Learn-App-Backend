@@ -45,7 +45,7 @@ public class WordsService {
     public ListWordResponse getRandomWordsByCategory(String accessToken, Long categoryId) {
         Long userId = jwtTokenProvider.getUserIdFromToken(accessToken);
         List<Word> words = wordsRepository.findByCategoryId(categoryId);
-        log.info("words by category were taken successfully");
+        log.info("words by category were taken successfully for user: {}", userId);
         ListWordResponse response = getWordResponses(userId, words);
 
         // make the rotation

@@ -2,14 +2,19 @@ package projectpractice.tlearnapp.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import projectpractice.tlearnapp.enums.StatsStatus;
 
-@Data
 @Builder
-public class StatsDto {
-    private Long userId;
-    private Long wordId;
-    private Long attempts;
-    private StatsStatus status;
-    private Long lastDays;
-}
+public record StatsDto (
+        @Getter
+    Long userId,
+        @Getter
+        Long wordId,
+        @Getter
+        Long attempts,
+        @Getter
+        StatsStatus status,
+        @Getter
+        Long lastDays
+) {}

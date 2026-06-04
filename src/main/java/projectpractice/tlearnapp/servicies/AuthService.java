@@ -55,15 +55,9 @@ public class AuthService {
             throw new BadCredentialsException("Wrong password");
         }
 
-        return createAndSaveTokens(user);
-    }
+        refreshTokenRepository.deleteByUser(user);
 
-    @Transactional
-    public void register(String email, String password) {
-        if (userRepository.existsByEmail(email)) {
-            throw new InvalidRequestException("User already exists: " + email);
-        }
-        createUser(email, password);
+        return createAndSaveTokens(user);
     }
 
     @Transactional
